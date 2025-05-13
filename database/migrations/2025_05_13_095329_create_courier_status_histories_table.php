@@ -17,17 +17,18 @@ return new class extends Migration
     //     });
     // }
 
-    public function up()
+public function up()
 {
     Schema::create('courier_status_histories', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('courier_id')->constrained('couriers')->onDelete('cascade');
-        $table->string('status'); // e.g. Picked, In Transit, Delivered
+        $table->foreignId('courier_id')->constrained()->onDelete('cascade');
+        $table->string('status');
         $table->text('notes')->nullable();
         $table->timestamp('changed_at')->useCurrent();
         $table->timestamps();
     });
 }
+
 
     /**
      * Reverse the migrations.
