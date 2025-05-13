@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Courier;
+use Illuminate\Support\Str;
 
 class CourierController extends Controller
 {
@@ -19,7 +20,7 @@ class CourierController extends Controller
      */
     public function create()
     {
-        //
+        return view('couriers.create');
     }
 
     /**
@@ -27,7 +28,20 @@ class CourierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+        'sender_name' => 'required|string',
+        'receiver_name' => 'required|string',
+        'origin' => 'required|string',
+        'destination' => 'required|string',
+        'weight' => 'required|numeric',
+        'rate' => 'required|numeric',               
+        ]);
+        $validated['tracking_number'] = strtoupper(Str::random(10)); // Generate tracking number
+        $validated['status'] = 'Pending'; // Default status
+
+        Courier::create($validated);
+
+        return redirect()->route('couriers.index')->with('success', 'Courier added successfully!');
     }
 
     /**
